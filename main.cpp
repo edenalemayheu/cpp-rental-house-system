@@ -1,3 +1,55 @@
+void displayHouse(House h){
+    cout<<"\nProperty ID: "<<h.propertyID<<endl;
+    cout<<"Title: " <<h.title<<endl;
+    cout<<"Location: "<<h.location<<endl;
+    cout<<"Type: "<<h.type<<endl;
+    cout<<"Bedrooms: "<<h.bedrooms<< endl;
+    cout<<"Price: "<<h.price<<endl;
+    cout<<"Status: "<<h.status<<endl;
+    cout<<"Phone: +251 "<<h.phone<<endl;
+    cout<<"\n\n";
+}
+
+void add(){
+    House h;
+    h.propertyID = generate_ID();
+    h.ownerCode = generate_Code();
+cin.ignore();
+cout<<"Enter descriptive Title:";
+getline(cin,h.title);
+cout<<"Enter location:";
+getline(cin,h.location);
+cout<<"Enter type:";
+getline(cin,h.type);
+cout<<"Enter number of bedrooms:";
+
+ while (!(cin >> h.bedrooms)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout<<"Invalid input.";
+    }
+cout<<"Enter Price per month:";
+ while (!(cin >> h.price)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout<<"Invalid input. ";
+    }
+h.status="Available";
+while (true) {
+cout<<"Enter your contact information:+251 ";
+cin>>h.phone;
+if (h.phone.length() == 10) {
+            break;
+        } else {
+            cout<<"phone number should be of length 10. Please try again.\n";
+        }
+    }
+
+save(h);
+
+cout<<"\nThank you for using our system.Your house is added Successfully. \n";
+cout<<"Your property Id is "<<h.propertyID<<".And Your Owner Code is:"<<h.ownerCode <<". Keep it safe!!"<<endl;
+}
 void view(){
   ifstream file("houses.txt");
     if(!file){cout<<"File Could Not Open.\n";
