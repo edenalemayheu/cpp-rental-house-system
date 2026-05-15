@@ -4,9 +4,7 @@
 #include <fstream>
 #include <windows.h>
 #include <mysql.h>
-
 using namespace std;
-
 struct House{
     int propertyID;
     string title;
@@ -18,10 +16,7 @@ struct House{
     string phone;
     string ownerCode;
 };
-
-
 MYSQL* conn;
-
 void syncToMySQL(House h){
     if (!conn) return;
     string query = "INSERT INTO houses (propertyID, title, location, type, bedrooms, price, status, phone, ownerCode) VALUES ("
@@ -31,13 +26,11 @@ void syncToMySQL(House h){
                    "bedrooms=" + to_string(h.bedrooms) + ", price=" + to_string(h.price) + ", status='" + h.status + "', phone='" + h.phone + "';";
     mysql_query(conn, query.c_str());
 }
-
 void deleteFromMySQL(string code){
     if (!conn) return;
     string query ="DELETE FROM houses WHERE ownerCode = '" + code + "';";
     mysql_query(conn, query.c_str());
 }
-
 bool adminLogin(){
     string password;
     cout<<"Enter Admin Password: ";
@@ -94,7 +87,6 @@ string generate_Code(){
     }
     return "H" + to_string(maxCodeNum + 1);
 }
-
 void save(House h){
     ofstream file("houses.txt",ios::app);
     file<<h.propertyID<<endl;
@@ -121,7 +113,6 @@ void displayHouse(House h){
     cout<<"Phone: +251 "<<h.phone<<endl;
     cout<<"\n\n";
 }
-
 void add(){
     House h;
     h.propertyID = generate_ID();
@@ -134,7 +125,6 @@ getline(cin,h.location);
 cout<<"Enter type:";
 getline(cin,h.type);
 cout<<"Enter number of bedrooms:";
-
  while (!(cin >> h.bedrooms)) {
         cin.clear();
         cin.ignore(1000, '\n');
