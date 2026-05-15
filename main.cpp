@@ -181,17 +181,17 @@ cout<<"\nEnter the type of house you want: ";
 getline(cin,search_type);
 cout<<"Enter the number of bedrooms: ";
 
-while (!(cin >> search_bedrooms)) {
+while(!(cin>>search_bedrooms)){
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Invalid input.";
+        cout<<"Invalid input.";
     }
 cout<<"Enter Maximum Price: ";
 
- while (!(cin >> max_price)) {
+ while(!(cin >> max_price)){
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Invalid input.";
+        cout<<"Invalid input.";
     }
 
 House h;
@@ -223,7 +223,6 @@ while(file>>h.propertyID){
   }
   file.close();
 }
-
 void update(){
   ifstream file("houses.txt");
    if(!file){
@@ -235,10 +234,10 @@ int id;
 string code;
 cout<<"Enter Property ID: ";
 
-while(!(cin >> id)) {
+while(!(cin>>id)) {
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Invalid entry.  Re-enter ID";
+        cout<<"Invalid entry.  Re-enter ID";
     }
 cout<<"Enter Owner Code: ";
 cin>>code;
@@ -277,7 +276,7 @@ while(!(cin>>h.price)){
    case 2:{
        int statusChoice;
     cout<<"Enter New Status\n 1)Available  2)Rented: ";
-     while(!(cin>>statusChoice)  (statusChoice != 1 && statusChoice != 2)) {
+     while(!(cin>>statusChoice) || (statusChoice != 1 && statusChoice != 2)) {
                     cin.clear();
                     cin.ignore(1000, '\n');
                     cout<<"Invalid selection. Choose 1 or 2: ";
@@ -301,7 +300,7 @@ while(!(cin>>h.price)){
 
                 int statusChoice;
                 cout<<"Select New Status:\n1) Available  2) Rented\nEnter Choice: ";
-                while(!(cin>>statusChoice)  (statusChoice != 1 && statusChoice != 2)) {
+                while(!(cin>>statusChoice) ||  (statusChoice != 1 && statusChoice != 2)) {
                     cin.clear();
                     cin.ignore(1000, '\n');
                     cout<<"Invalid selection.Choose 1 or 2: ";}
@@ -396,7 +395,8 @@ void deletee(){
 int main(){
     conn = mysql_init(NULL);
     if (!mysql_real_connect(conn, "localhost", "root", "PASSWORD", "rental_db", 0, NULL, 0)) {
-        cout << "Connection Error\n";}
+        cout << "Connection Error\n"<<mysql_error(conn) << endl;
+    return 1;}
          else {
         cout << "System Connected Successfully!\n";}
     int roleChoice;
@@ -406,7 +406,7 @@ do{
         cout<<"Enter Choice: ";
         cin>>roleChoice;
 if(roleChoice==1){
-            if (!adminLogin()) {
+            if(!adminLogin()) {
                 cout<<"\nIncorrect Password! Access Denied.\n";
                  continue;
             }
