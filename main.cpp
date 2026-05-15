@@ -1,6 +1,6 @@
 int main(){
     conn = mysql_init(NULL);
-    if (!mysql_real_connect(conn, "localhost", "root", "Edelll@20", "rental_db", 0, NULL, 0)) {
+    if (!mysql_real_connect(conn, "localhost", "root", "PASSWORD", "rental_db", 0, NULL, 0)) {
         cout << "Connection Error\n";}
          else {
         cout << "System Connected Successfully!\n";}
