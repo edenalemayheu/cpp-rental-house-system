@@ -1,113 +1,67 @@
-#include <iostream>
-#include <vector>
-#include <cstring>
-#include <fstream>
-#include <windows.h>
-#include <mysql.h>
-
-using namespace std;
-
-struct House{
-    int propertyID;
-    string title;
-    string location;
-    string type;
-    int bedrooms;
-    float price;
-    string status;
-    string phone;
-    string ownerCode;
-};
-
-
-MYSQL* conn;
-
-void syncToMySQL(House h){
-    if (!conn) return;
-    string query = "INSERT INTO houses (propertyID, title, location, type, bedrooms, price, status, phone, ownerCode) VALUES ("
-                   + to_string(h.propertyID) + ", '" + h.title + "', '" + h.location + "', '" + h.type + "', "
-                   + to_string(h.bedrooms) + ", " + to_string(h.price) + ", '" + h.status + "', '" + h.phone + "', '" + h.ownerCode + "') "
-                   "ON DUPLICATE KEY UPDATE title='" + h.title + "', location='" + h.location + "', type='" + h.type + "', "
-                   "bedrooms=" + to_string(h.bedrooms) + ", price=" + to_string(h.price) + ", status='" + h.status + "', phone='" + h.phone + "';";
-    mysql_query(conn, query.c_str());
-}
-
-void deleteFromMySQL(string code){
-    if (!conn) return;
-    string query ="DELETE FROM houses WHERE ownerCode = '" + code + "';";
-    mysql_query(conn, query.c_str());
-}
-
-bool adminLogin(){
-    string password;
-    cout<<"Enter Admin Password: ";
-    cin>>password;
-    if (password=="aastu2026"){
-        return true;}
-        return false;
-}
-
-int generate_ID(){
-    ifstream file("houses.txt");
-    int maxID = 0;
-    if (file) {
-        House tmp;
-        while(file>>tmp.propertyID) {
-            file.ignore();
-            getline(file, tmp.title);
-            getline(file, tmp.location);
-            getline(file, tmp.type);
-            file>>tmp.bedrooms>>tmp.price>>tmp.status>>tmp.phone;
-            file.ignore();
-            getline(file, tmp.ownerCode);
-            if (tmp.propertyID > maxID) {
-                maxID = tmp.propertyID;
+int main(){
+    conn = mysql_init(NULL);
+    if (!mysql_real_connect(conn, "localhost", "root", "Edelll@20", "rental_db", 0, NULL, 0)) {
+        cout << "Connection Error\n";}
+         else {
+        cout << "System Connected Successfully!\n";}
+    int roleChoice;
+do{
+        cout<<"\n----- PROPERTY RENTAL SYSTEM -----\n";
+        cout<<"1. Admin\n2. User\n3. Exit\n";
+        cout<<"Enter Choice: ";
+        cin>>roleChoice;
+if(roleChoice==1){
+            if (!adminLogin()) {
+                cout<<"\nIncorrect Password! Access Denied.\n";
+                 continue;
             }
-        }
-        file.close();
-    }
-    return maxID + 1;
+   int adminChoice;
+do {
+                cout<<"\n--- ADMIN MENU ---\n";
+                cout<<"1. Add House\n2. Update House\n3. Delete House\n4. View Houses\n5. Search House\n6. Logout\n";
+                cout<<"Enter Choice: ";
+                cin>>adminChoice;
+switch(adminChoice){
+    case 1:{
+            add();
+            break;}
+    case 2:{
+            update();
+            break;}
+    case 3:{
+            deletee();
+            break;}
+    case 4:{
+            view();
+            break;}
+    case 5:{
+            search();
+            break;}
+    case 6:{
+            cout<<"\nLogging out of admin portal...\n";
+            break;}
+    default:{
+            cout<<"\nInvalid selection code.\n";}
 }
+}while(adminChoice!=6);
+}else if (roleChoice == 2) {
+            int userChoice;
+do{
+                cout<<"\n--- USER MENU ---\n";
+                cout<<"1. View Houses\n2. Search House\n3. Back to Main Menu\n";
+                cout<<"Enter Choice: ";
+                cin>>userChoice;
 
-
-string generate_Code(){
-   ifstream file("houses.txt");
-    int maxCodeNum = 99;
-    if (file) {
-        House tmp;
-        while(file>>tmp.propertyID) {
-            file.ignore();
-            getline(file, tmp.title);
-            getline(file, tmp.location);
-            getline(file, tmp.type);
-            file>>tmp.bedrooms>>tmp.price>>tmp.status>>tmp.phone;
-            file.ignore();
-            getline(file, tmp.ownerCode);
-            if (tmp.ownerCode.length() > 1 && tmp.ownerCode[0] == 'H') {
-                int currentNum = atoi(tmp.ownerCode.substr(1).c_str());
-                if (currentNum > maxCodeNum) {
-                    maxCodeNum = currentNum;
-                }
-            }
-        }
-        file.close();
-    }
-    return "H" + to_string(maxCodeNum + 1);
+switch(userChoice){
+                    case 1: view(); break;
+                    case 2: search(); break;
+                    case 3: cout<<"\nReturning to home intercept...\n"; break;
+                    default: cout<<"\nInvalid input.\n";
 }
-
-void save(House h){
-    ofstream file("houses.txt",ios::app);
-    file<<h.propertyID<<endl;
-    file<<h.title<<endl;
-    file<<h.location<<endl;
-    file<<h.type<<endl;
-    file<<h.bedrooms<<endl;
-    file<<h.price<<endl;
-    file<<h.status<<endl;
-    file<<h.phone<<endl;
-    file<<h.ownerCode<<endl;
-    file.close();
-
-    syncToMySQL(h);
+}while(userChoice!=3);
+                                  }
+}while(roleChoice!=3);
+    if (conn) mysql_close(conn);
+    cout<<"\nHave a wonderful time:) Thank you!\n";
+    return 0;
 }
-
