@@ -1,3 +1,122 @@
+void update(){
+  ifstream file("houses.txt");
+   if(!file){
+        cout<<"File Could Not Open.\n";
+      return;}
+vector<House> temp;
+House h;
+int id;
+string code;
+cout<<"Enter Property ID: ";
+
+while(!(cin >> id)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Invalid entry.  Re-enter ID";
+    }
+cout<<"Enter Owner Code: ";
+cin>>code;
+bool found = false;
+while(file>>h.propertyID){
+        file.ignore();
+        getline(file,h.title);
+        getline(file,h.location);
+        getline(file,h.type);
+        file>>h.bedrooms;
+        file>>h.price;
+        file>>h.status;
+        file>>h.phone;
+        file.ignore();
+        getline(file, h.ownerCode);
+if(h.propertyID==id && h.ownerCode==code){
+        found = true;
+        cout<<"\n======= PROPERTY FOUND =======\n";
+        displayHouse(h);
+ int choice;
+cout<<"What do u want to update?"<<endl;
+cout<<"1)Price"<<endl;
+cout<<"2)Status"<<endl;
+cout<<"3)Phone number"<<endl;
+cout<<"4)All"<<endl;
+cin>>choice;
+switch(choice){
+   case 1:{
+      cout<<"Enter New Price: ";
+while(!(cin>>h.price)){
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout<<"Invalid.";
+                }
+      break;}
+   case 2:{
+       int statusChoice;
+    cout<<"Enter New Status\n 1)Available  2)Rented: ";
+     while(!(cin>>statusChoice)  (statusChoice != 1 && statusChoice != 2)) {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout<<"Invalid selection. Choose 1 or 2: ";
+                }
+                if(statusChoice == 1) h.status = "Available";
+                else h.status = "Rented";
+    break;}
+   case 3:{
+    while(true){
+                    cout<<"Enter New contact information:";
+                    cin>>h.phone;
+                    if(h.phone.length() == 10) break;
+                    cout<<"Phone number should be of length 10.Please try again.\n";}
+    break;}
+   case 4:{
+        cout<<"Enter New Price: ";
+                while(!(cin>>h.price)) {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout<<"Invalid input. Enter again: ";}
+
+                int statusChoice;
+                cout<<"Select New Status:\n1) Available  2) Rented\nEnter Choice: ";
+                while(!(cin>>statusChoice)  (statusChoice != 1 && statusChoice != 2)) {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout<<"Invalid selection.Choose 1 or 2: ";}
+                if(statusChoice == 1) h.status ="Available";
+                else h.status = "Rented";
+
+                while(true) {
+                    cout<<"Enter New contact information: ";
+                    cin>>h.phone;
+                    if(h.phone.length() == 10) break;
+                    cout<<"Phone number should be of length 10. Please try again.\n";}
+                break;
+            }
+   default:
+    cout<<"Invalid Input!";
+        }
+        syncToMySQL(h);
+        }
+    temp.push_back(h);
+}
+file.close();
+
+ofstream outFile("houses.txt");
+
+    for(int i = 0; i < temp.size(); i++){
+        outFile<<temp[i].propertyID<<endl;
+        outFile<<temp[i].title<<endl;
+        outFile<< temp[i].location<<endl;
+        outFile<<temp[i].type<<endl;
+        outFile<<temp[i].bedrooms<<endl;
+        outFile<<temp[i].price<<endl;
+        outFile<<temp[i].status<<endl;
+        outFile<<temp[i].phone<<endl;
+        outFile<<temp[i].ownerCode<<endl;
+    }
+    outFile.close();
+  if(found){
+        cout<<"\nYour house is Updated Successfully.\n";}
+    else{
+        cout<<"\nYour house is not registered!!!\n";}
+}
 int main(){
     conn = mysql_init(NULL);
     if (!mysql_real_connect(conn, "localhost", "root", "PASSWORD", "rental_db", 0, NULL, 0)) {
