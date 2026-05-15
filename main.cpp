@@ -1,3 +1,80 @@
+void view(){
+  ifstream file("houses.txt");
+    if(!file){cout<<"File Could Not Open.\n";
+        return;}
+House h;
+    cout<<"\n======= PROPERTY LIST =======\n";
+    while(file>>h.propertyID){
+        file.ignore();
+        getline(file,h.title);
+        getline(file, h.location);
+        getline(file, h.type);
+        file>>h.bedrooms;
+        file>>h.price;
+        file>>h.status;
+        file>>h.phone;
+        file.ignore();
+        getline(file,h.ownerCode);
+     displayHouse(h);
+    }
+file.close();
+}
+void search(){
+     ifstream file("houses.txt");
+      if(!file){
+            cout<<"File Could Not Open.\n";
+        return;}
+string search_type;
+int search_bedrooms;
+float max_price;
+cin.ignore();
+cout<<"\nEnter the type of house you want: ";
+getline(cin,search_type);
+cout<<"Enter the number of bedrooms: ";
+
+while (!(cin >> search_bedrooms)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Invalid input.";
+    }
+cout<<"Enter Maximum Price: ";
+
+ while (!(cin >> max_price)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Invalid input.";
+    }
+
+House h;
+bool found=false;
+while(file>>h.propertyID){
+        file.ignore();
+        getline(file,h.title);
+        getline(file,h.location);
+        getline(file,h.type);
+        file>>h.bedrooms;
+        file>>h.price;
+        file>>h.status;
+        file>>h.phone;
+        file.ignore();
+        getline(file,h.ownerCode);
+  if (search_type == h.type && h.bedrooms == search_bedrooms && h.price <= max_price) {
+            found = true;
+            displayHouse(h);
+        }
+    }
+  if(!found){
+      int ans;
+      cout<<"Match not found for more house information you can view other properties.\nClick 1 to view properties , other key to continue\n";
+      cin>>ans;
+      if(ans==1)
+        view();
+      else
+        return;
+  }
+  file.close();
+}
+
 void update(){
   ifstream file("houses.txt");
    if(!file){
