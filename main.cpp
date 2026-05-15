@@ -194,6 +194,56 @@ ofstream outFile("houses.txt");
     else{
         cout<<"\nYour house is not registered!!!\n";}
 }
+void deletee(){
+      ifstream file("houses.txt");
+        if(!file){cout << "File Could Not Open.\n";
+           return;}
+    string code;
+    cout<<"\nEnter Owner Code to delete: ";
+    cin>>code;
+    House h;
+   vector<House>tempStorage;
+    bool found = false;
+ while(file>>h.propertyID){
+        file.ignore();
+        getline(file,h.title);
+        getline(file,h.location);
+        getline(file,h.type);
+        file>>h.bedrooms;
+        file>>h.price;
+        file>>h.status;
+        file>>h.phone;
+        file.ignore();
+        getline(file,h.ownerCode);
+        if(h.ownerCode == code){
+            found = true;
+            deleteFromMySQL(code);
+            continue;
+        }
+        tempStorage.push_back(h);
+
+    }
+    file.close();
+    ofstream outFile("houses.txt");
+    for(int i = 0; i < tempStorage.size(); i++){
+        outFile<<tempStorage[i].propertyID<<endl;
+        outFile<<tempStorage[i].title<<endl;
+        outFile<<tempStorage[i].location<<endl;
+        outFile<<tempStorage[i].type<<endl;
+        outFile<<tempStorage[i].bedrooms<<endl;
+        outFile<<tempStorage[i].price<<endl;
+        outFile<<tempStorage[i].status<<endl;
+        outFile<<tempStorage[i].phone<<endl;
+        outFile<<tempStorage[i].ownerCode<<endl;
+    }
+    outFile.close();
+    if(found){
+        cout<<"\nProperty Deleted Successfully.\n";
+    }
+    else{
+        cout<<"\nInvalid Owner Code.\n";
+    }
+}
 int main(){
     conn = mysql_init(NULL);
     if (!mysql_real_connect(conn, "localhost", "root", "PASSWORD", "rental_db", 0, NULL, 0)) {
