@@ -455,6 +455,8 @@ switch(userChoice){
 }
 }while(userChoice!=3);
                                   }
+    else
+                        cout<<"Invalid input,Try again\n";
 }while(roleChoice!=3);
     if (conn) mysql_close(conn);
     cout<<"\nHave a wonderful time:) Thank you!\n";
