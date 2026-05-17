@@ -213,7 +213,7 @@ while(file>>h.propertyID){
         }
     }
   if(!found){
-      int ans;
+      char ans;
       cout<<"Match not found for more house information you can view other properties.\nClick 1 to view properties , other key to continue\n";
       cin>>ans;
       if(ans==1)
